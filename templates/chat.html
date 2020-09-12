@@ -74,7 +74,7 @@
                 var m=document.getElementById("msg").value.trim();
                 if(m.length!=0) {
                     sock.emit("send",{"sndr":"{{ u1['handle'] }}","rcvr":"{{ u2 }}","room":"{{ u1['chats'][u2][0] }}","msg":m});
-                    document.getElementById("msg").innerHTML="";
+                    document.getElementById("msg").value="";
                     document.getElementById("msg").focus();
                 }
             }
