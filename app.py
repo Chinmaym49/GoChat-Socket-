@@ -4,7 +4,7 @@ from flask_pymongo import PyMongo
 from flask_socketio import SocketIO,emit,join_room
 
 app=Flask(__name__)
-app.config["MONGO_URI"]="mongodb+srv://chinmay:yamnihc@gochatcluster.fflcr.mongodb.net/GoChat?retryWrites=true&w=majority"
+app.config["MONGO_URI"]="mongodb+srv://chinmay:chinmay[::-1]@gochatcluster.fflcr.mongodb.net/GoChat?retryWrites=true&w=majority"
 db=PyMongo(app).db
 app.secret_key="cD7nTw3jF4cwA1dv"
 app.permanent_session_lifetime=timedelta(days=10)
