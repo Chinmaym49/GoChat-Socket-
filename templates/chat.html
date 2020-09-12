@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoChat</title>
+    <link rel="icon" href="{{ url_for('static',filename='icon.png') }}" type="png">
+    <link rel="stylesheet" href="{{ url_for('static',filename='chat.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container-fluid" style="padding-top: 50px; padding-bottom: 50px;">
+        <div class="row justify-content-center">
+            <div class="col-sm-12">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h2 class="card-title">GoChat</h2>
+                        <h3 class="card-subtitle mb-2 text-muted">Chatting with {{ u2 }} !</h3>
+                        <hr>
+                        <br>
+                        <div id="msgblock">
+                            {% for c in u1["chats"][u2][1:] %}
+                                {% if c[2]==0 %}
+                                    <div class="containerr">
+                                        <p>{{ c[0] }}</p>
+                                        <span class="time-right">{{ c[1] }} <b>{{ u2 }}</b></span>
+                                    </div>
+                                {% else %}
+                                    <div class="containerr">
+                                        <p>{{ c[0] }}</p>
+                                        <span class="time-right">{{ c[1] }} <b>{{ u1["handle"] }}</b></span>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <form id="sndmsg">
+                            <textarea id="msg" style="border-radius: 5px; width: 100%; box-sizing: border-box;" required></textarea>
+                            <br>
+                            <br>
+                            <button type="submit" class="btn btn-outline-secondary" id="rcvr" value="{{ u2 }}"><p style="margin: 0px; vertical-align: middle; display: inline-flex; font-size: large;">SEND&emsp; <span class="material-icons">send</span></p></button>
+                        </form>
+                    </div>
+                  </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div id="msgblock">
+        {% for c in u1["chats"][u2][1:] %}
+            {% if c[2]==0 %}
+                <p>{{ c[1] }} | {{ u2 }} : {{ c[0] }}</p>
+            {% else %}
+                <p>{{ c[1] }} | {{ u1["handle"] }} : {{ c[0] }}</p>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <form id="sndmsg">
+        <textarea id="msg" required></textarea>
+        <br>
+        <button type="submit" id="rcvr" value="{{ u2 }}">SEND</button>
+    </form> -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js"></script>
+    <script>
+        const sock=io.connect("/");
+        sock.on("connect",function() {
+            sock.emit("join",{"usr":"{{ u1['handle'] }}","room":"{{ u1['chats'][u2][0] }}"});
+        
+            document.getElementById("sndmsg").onsubmit=function(e) {
+                e.preventDefault();
+                var m=document.getElementById("msg").value.trim();
+                if(m.length!=0) {
+                    sock.emit("send",{"sndr":"{{ u1['handle'] }}","rcvr":"{{ u2 }}","room":"{{ u1['chats'][u2][0] }}","msg":m});
+                    document.getElementById("msg").innerHTML="";
+                    document.getElementById("msg").focus();
+                }
+            }
+        });
+
+        sock.on("receive",function(data) {
+            document.getElementById("msgblock").innerHTML+='<div class="containerr"><p>'+data["msg"]+'</p><span class="time-right">'+data["time"]+' <b>'+data["sndr"]+'</b></span></div>';
+        });
+
+
+    </script>
+
+</body>
+</html>

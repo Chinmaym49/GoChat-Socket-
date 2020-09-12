@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoChat</title>
+    <link rel="icon" href="{{ url_for('static',filename='icon.png') }}" type="png">
+    <link rel="stylesheet" href="{{ url_for('static',filename='list.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{{ url_for('static',filename='script.js') }}"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container-fluid" style="padding-top: 50px; padding-bottom: 50px;">
+        <div class="row justify-content-center">
+            <div class="col-sm-12">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h2 class="card-title">GoChat</h2>
+                        <h3 class="card-subtitle mb-2 text-muted">Welcome {{ usr["name"] }} !</h3>
+                        <hr>
+                        <br>
+                        {% if (usr["friends"])|length==0 %}
+                            <h5 style="vertical-align: middle; display: inline-flex;">You have no friends <span class="material-icons">sentiment_very_dissatisfied</span></h5>
+                            <h5 style="vertical-align: middle; display: inline-flex;">Don't worry, try&#160;<a href="{{ url_for('sendRequest') }}"> sending requests</a>!</h5>
+                        {% else %}
+                            <h5 style="vertical-align: middle; display: inline-flex;">GoChat with your friends <span class="material-icons">sentiment_satisfied_alt</span></h5> 
+                            
+                            <div class="containerr">
+                                <div class="items">
+                                    <div class="items-body">
+                                        {% for i in usr["friends"] %}
+                                            <div class="items-body-content" onclick="window.location.href='{{ url_for('chat',sndr=usr['handle'],rcvr=i) }}'">
+                                                <span style="font-size: large;">{{ i }}</span>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            <h5>You can <a href="{{ url_for('sendRequest') }}">send more requests</a>!</h5>
+                        {% endif %}
+                        <hr>
+                        {% if (usr["requests"])|length==0 %}
+                            <h5>No requests. All caught up!</h5>
+                        {% else %}
+                            <h5>Pending requests !</h5>
+                            <form id="accreq">
+                                {% for i in usr["requests"] %}
+                                    <h5 style="display: inline-block; height: 25px;">
+                                        <a href="{{ url_for('view',user=i) }}">{{ i }}</a>
+                                        &emsp;
+                                        <button type="submit" class="btn btn-secondary btn-sm" name="accept" value="{{ i }}">ACCEPT</button>
+                                    </h5>
+                                {% endfor %}
+                            </form>
+                        {% endif %}
+                        <hr>
+                        <button class="btn btn-dark" onclick="window.location.href='{{ url_for('logout') }}'">LOGOUT</button>
+                    </div>
+                  </div>
+            </div>
+        </div>
+    </div>
+    <!-- <h3>Welcome {{ usr["name"] }} !</h3>
+    {% if (usr["friends"])|length==0 %}
+        <p>You have no friends :( </p>
+        <p>Don't worry, try <a href="{{ url_for('sendRequest') }}">sending requests</a>!</p>
+    {% else %}
+        <p>GoChat with your friends :)</p> 
+        {% for i in usr["friends"] %}
+            <a href="{{ url_for('chat',sndr=usr['handle'],rcvr=i) }}">{{ i }}</a>
+            <br>
+        {% endfor %}
+        <p>You can <a href="{{ url_for('sendRequest') }}">send more requests</a>!</p>
+    {% endif %}
+    {% if (usr["requests"])|length==0 %}
+        <p>No requests. All caught up!</p>
+    {% else %}
+        <form id="accreq">
+            <fieldset style="width: fit-content;">
+                <legend>Pending requests!</legend>
+                {% for i in usr["requests"] %}
+                    <a href="{{ url_for('view',user=i) }}">{{ i }}</a>
+                    <button type="submit" name="accept" value="{{ i }}">ACCEPT</button>
+                {% endfor %}
+            </fieldset>
+        </form>
+    {% endif %}
+    <br>
+    <button onclick="window.location.href='{{ url_for('logout') }}'">LOGOUT</button> -->
+</body>
+</html>

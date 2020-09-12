@@ -1,0 +1,38 @@
+
+.containerr {
+  
+    display: grid;
+    place-items: center;
+    background-color: rgb(255, 255, 255);
+  }
+  
+  .items {
+    width: 300px;
+    background: #fffffe;
+    box-shadow: 0 3px 6px rgba(black,0.16), 0 3px 6px rgba(black,0.23);
+  }
+  
+  
+  .items-body {
+    padding: 10px;
+    margin: 10px;
+    display: grid;
+    grid-gap: 10px;
+  }
+  
+  .items-body-content {
+    padding: 10px;
+    padding-right: 0px;
+    display: grid;
+    grid-template-columns: 10fr 1fr;
+    font-size: 13px;
+    grid-gap: 10px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    
+  }
+  
+  .items-body-content:hover {
+    border-radius: 10px;
+    border: 1px solid rgb(0, 0, 0);
+  }
